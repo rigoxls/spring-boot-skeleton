@@ -6,7 +6,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
-import com.skeleton.api.entity.User;
+import com.skeleton.api.repository.UserEntity;
 
 @Repository
 @Transactional
@@ -16,7 +16,7 @@ public class UserDAOService {
 	private EntityManager entityManager;
 	
 	
-	public long insert(User user) {
+	public long updateUser(UserEntity user) {
 		entityManager.persist(user);
 		return user.getId();
 	}

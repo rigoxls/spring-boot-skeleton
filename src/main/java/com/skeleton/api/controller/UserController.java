@@ -1,25 +1,65 @@
 package com.skeleton.api.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
-import com.skeleton.api.entity.User;
-import com.skeleton.api.service.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import com.skeleton.api.dto.UserDTO;
+import com.skeleton.api.repository.UserEntity;
+import com.skeleton.api.service.UserService;
 
 @RestController
 public class UserController {
-		
+
 	@Autowired
-	private UserRepository repo;	
+	private UserService userService;
+
+	@GetMapping("/user/get/{userId}")
+	public Optional<UserEntity> getUserById(@PathVariable long userId) {
+		Optional<UserEntity> user = userService.getUserById(userId);
+		return user;
+	}
+
+	@GetMapping("/user/list")
+	public List<UserEntity> getAllUsers() {
+		List<UserEntity> users = userService.getAllUsers();
+		return users;
+	}
+
+	@PostMapping("/user/create")
+	public ResponseEntity<UserEntity> createUser(@RequestBody UserDTO newUser) {
+		UserEntity user = userService.createUser(newUser);
+
+		if (user == null) {
+			return ResponseEntity.noContent().build();
+		}
+
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId())
+				.toUri();
+
+		return ResponseEntity.created(location).build();
+	}
 	
-	@GetMapping(path="/getAllUsers")
-	public String getAllUsers() {		
-		
-		User usuario = new User("rigo", "admin");
-		System.out.println(usuario);
-	    repo.save(usuario);
-		
-		return "Prueba uno";		
+	@PutMapping("/user/update")
+	public String updateUser(@RequestBody UserDTO userToUpdate){
+		UserEntity user = userService.updateUser(userToUpdate);
+		return user.getName();
+	}
+
+	@DeleteMapping("/user/delete/{userId}")
+	public ResponseEntity<Void> deleteUser(@PathVariable long userId) {
+		userService.deleteUser(userId);
+		return ResponseEntity.noContent().build();
 	}
 }
