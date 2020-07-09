@@ -1,6 +1,7 @@
 package com.skeleton.api.controller;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,9 +53,9 @@ public class UserController {
 	}
 	
 	@PutMapping("/user/update")
-	public String updateUser(@RequestBody UserDTO userToUpdate){
+	public HashMap<String, Object> updateUser(@RequestBody UserDTO userToUpdate){
 		UserEntity user = userService.updateUser(userToUpdate);
-		return user.getName();
+		return user.getPublicData();
 	}
 
 	@DeleteMapping("/user/delete/{userId}")

@@ -1,10 +1,14 @@
 package com.skeleton.api.repository;
 
+import java.util.HashMap;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.json.JSONObject;
 
 import com.skeleton.api.dto.UserDTO;
 
@@ -108,6 +112,17 @@ public class UserEntity {
 		this.phone = userToUpdate.phone;
 		this.role = userToUpdate.role;
 		this.status = userToUpdate.status;			
+	}
+	
+	public HashMap<String, Object> getPublicData() {
+		HashMap<String, Object> user = new HashMap<>();
+		user.put("name", getName());
+		user.put("lastname", getLastname());
+		user.put("email", getEmail());
+		user.put("address", getAddress());
+		user.put("phone", getPhone());
+		user.put("role", getRole());   
+	    return user;
 	}
 
 	@Override
