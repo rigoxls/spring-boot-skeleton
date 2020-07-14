@@ -1,8 +1,12 @@
 package com.skeleton.api.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class UserDTO {
 
+	@NotNull()
 	private long id;
+	@NotNull()
 	public String name;
 	public String lastname;
 	public String email;

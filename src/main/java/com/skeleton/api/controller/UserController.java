@@ -6,8 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.skeleton.api.dto.UserDTO;
-import com.skeleton.api.exception.UserNotFoundException;
 import com.skeleton.api.repository.UserEntity;
 import com.skeleton.api.service.UserService;
 
@@ -45,19 +44,17 @@ public class UserController {
 	@PostMapping("/user/create")
 	public ResponseEntity<UserEntity> createUser(@RequestBody UserDTO newUser) throws IOException {
 		UserEntity user = userService.createUser(newUser);
-
 		if (user == null) {
 			return ResponseEntity.noContent().build();
 		}
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId())
 				.toUri();
-
 		return ResponseEntity.created(location).build();
 	}
 
 	@PutMapping("/user/update")
-	public HashMap<String, Object> updateUser(@RequestBody UserDTO userToUpdate) throws Exception {
+	public HashMap<String, Object> updateUser(@Valid @RequestBody UserDTO userToUpdate) throws Exception {
 		UserEntity user = userService.updateUser(userToUpdate);
 		return user.getPublicData();
 	}

@@ -36,13 +36,13 @@ public class UserService {
 
 	public UserEntity updateUser(UserDTO userToUpdate) throws UserNotFoundException {
 		Long userId = userToUpdate.getId();
-		try {			
+		try {
 			UserEntity user = userRepository.getOne(userId);
 			user.setAll(userToUpdate);
 			userRepository.save(user);
-			return user;			
-		} catch(Exception err) {
-			 throw new UserNotFoundException("User not found : " + userId , err);
+			return user;
+		} catch (Exception err) {
+			throw new UserNotFoundException("User not found : " + userId, err);
 		}
 	}
 
